@@ -16,7 +16,6 @@ public class Gravity implements IEntityComponent {
     }
 
     public float GetStrength() {
-
         return _strength;
     }
 

@@ -8,7 +8,7 @@ import it.jjdoes.Atomix.Types.Entity.IEntity;
 public class DiagonalMovementHandler {
     public static void Update(Grid grid, IEntity entity, int row, int col) {
         if (entity.Has(EntityEnum.DiagonalMovement)) {
-            if (entity.Has(EntityEnum.Solid) && entity.Has(EntityEnum.Gravity)) {
+            if (entity.Has(EntityEnum.Solid)) {
                 NonstaticSolidHandler.Update(grid, entity, row, col);
             }
         }

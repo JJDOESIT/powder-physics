@@ -8,11 +8,13 @@ import it.jjdoes.Atomix.Types.Entity.EntityEnum;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class NonstaticSolidHandler {
-
-    // General update function for the nonstatic solid grounded handler
+    
     public static void Update(Grid grid, IEntity entity, int x, int y) {
-        int height = grid.GetHeight();
+        // Declare top-level components
         Grounded grounded = (Grounded) entity.Get(EntityEnum.Grounded);
+
+        // Declare height of the grid
+        int height = grid.GetHeight();
 
         // If the entity is already grounded, return early
         // Note: This can be done because this means a block underneath has disabled this entity
@@ -40,7 +42,6 @@ public class NonstaticSolidHandler {
         }
     }
 
-    // Disable grounded for the whole column
     public static void DisableGrounded(Grid grid, int x, int y) {
         // Scan vertically upwards through the column
         for (int dx = x; dx >= 0; dx--) {

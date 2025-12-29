@@ -9,9 +9,9 @@ import it.jjdoes.Atomix.Types.Entity.EntityEnum;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class GasHandler {
-
-    // General update function for the nonstatic solid grounded handler
+    
     public static void Update(Grid grid, IEntity entity, int x, int y) {
+        // Declare top-level components
         Grounded grounded = (Grounded) entity.Get(EntityEnum.Grounded);
 
         // If the entity has not been processed yet

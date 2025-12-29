@@ -3,6 +3,7 @@ package it.jjdoes.Atomix.Systems;
 import java.util.ArrayList;
 
 import it.jjdoes.Atomix.Components.World.Grid;
+import it.jjdoes.Atomix.Engine.Logic.Logic;
 import it.jjdoes.Atomix.Systems.PositionHandlers.GasHandler;
 import it.jjdoes.Atomix.Systems.PositionHandlers.LiquidHandler;
 import it.jjdoes.Atomix.Systems.PositionHandlers.NonstaticSolidHandler;
@@ -10,7 +11,6 @@ import it.jjdoes.Atomix.Types.Entity.EntityEnum;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class PositionHandler {
-    public static int maxSteps = 30;
 
     public static void Update(Grid grid, IEntity entity, int row, int col) {
         if (entity.Has(EntityEnum.Velocity)) {
@@ -38,6 +38,7 @@ public class PositionHandler {
         int e2;
 
         int step = 0;
+        int maxSteps = Logic.GetMaxSteps();
         while (step < maxSteps) {
             e2 = 2 * error;
             if (e2 >= dy) {

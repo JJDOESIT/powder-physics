@@ -21,7 +21,6 @@ import it.jjdoes.Atomix.Types.Entity.EntityEnum;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class LiquidHandler {
-    // General update function for the nonstatic liquid position handler
     public static void Update(Grid grid, IEntity entity, int x, int y) {
         // Declare top-level components
         Velocity velocity = (Velocity) entity.Get(EntityEnum.Velocity);
@@ -61,6 +60,7 @@ public class LiquidHandler {
                 // Fetch the next entity in the path
                 IEntity next = grid.GetEntity(dx, dy);
 
+                // If the entity is corrosive, and the next entity is not corrosive, and the next entity is of type solid or liquid
                 if (entity.Has(EntityEnum.Corrosive) && !next.Has(EntityEnum.Corrosive) && ((next.Has(EntityEnum.Solid) || next.Has(EntityEnum.Liquid)))) {
                     boolean corrode = false;
 
@@ -74,7 +74,7 @@ public class LiquidHandler {
                     if (corrode) {
                         IEntity air = new Entity(Color.WHITE);
                         air.Add(new NonCollidable(), EntityEnum.NonCollidable);
-                        grid.Replace(corrosive.GetParticle().Clone(), dx, dy);
+                        grid.Replace(corrosive.GetParticle(), dx, dy);
                         grid.Replace(air, x, y);
                     }
                     exit = true;
@@ -97,14 +97,14 @@ public class LiquidHandler {
                     velocity.SetVelocity(0, velocity.GetYVelocity());
                     exit = true;
                 }
-                // If the next entity is of type non-collidable
+                // If the next entity is of type non-collidable or gas
                 else if (next.Has(EntityEnum.NonCollidable) || next.Has(EntityEnum.Gas)) {
                     // Swap and continue
                     grid.Swap(x, y, dx, dy);
                     x = dx;
                     y = dy;
                 }
-                // If the next entity is of type nonstatic liquid
+                // If the next entity is of type  liquid
                 else if (next.Has(EntityEnum.Liquid)) {
                     // Fetch the buoyancy of both liquids
                     int entityBuoyancy = ((Buoyancy) entity.Get(EntityEnum.Buoyancy)).GetRank();
@@ -137,9 +137,8 @@ public class LiquidHandler {
         }
     }
 
-    // General function to update velocity of a given entity
     public static void CalculateVelocity(Grid grid, IEntity entity, int x, int y) {
-        // Fetch velocity, spread, pressure, and grounded components
+        // Fetch top-level components
         Velocity velocity = (Velocity) entity.Get(EntityEnum.Velocity);
         Spread spread = (Spread) entity.Get(EntityEnum.Spread);
         Pressure pressure = (Pressure) entity.Get(EntityEnum.Pressure);
@@ -169,10 +168,10 @@ public class LiquidHandler {
         }
     }
 
-    // General function to determine if there is a lower available cell within the given distance
-    public static boolean IsLowerPoint(Grid grid, IEntity entity, int x, int y, int direction) {
-        // Declare spread component
+    private static boolean IsLowerPoint(Grid grid, IEntity entity, int x, int y, int direction) {
+        // Declare top-level components
         Spread spread = (Spread) entity.Get(EntityEnum.Spread);
+        
         int spreadDistance = spread.GetDistance();
 
         // Declare width and height of the grid

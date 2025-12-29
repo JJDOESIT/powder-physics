@@ -9,35 +9,47 @@ import it.jjdoes.Atomix.Types.Entity.EntityEnum;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class LiquidHandler {
-
     public static void Update(Grid grid, IEntity entity, int x, int y) {
-        int height = grid.GetHeight();
+        // Declare top-level components
         Grounded grounded = (Grounded) entity.Get(EntityEnum.Grounded);
+
+        // Declare height of the grid
+        int height = grid.GetHeight();
 
         // If the entity has not been processed yet
         if (grounded.GetRank() == -1 && grounded.IsGrounded()) {
             IEntity below = (x + 1 < height) ? grid.GetEntity(x + 1, y) : null;
 
-            // If the entity below the liquid is null
+            // If the entity below the liquid is null (out-of-bounds)
             if (below == null) {
                 ApplyRank(grid, x, y);
             }
             // If the entity below the liquid is of type solid
             else if (below.Has(EntityEnum.Solid)) {
+                // If the liquid is corrosive, and the solid is not corrosive, disable grounded
                 if (entity.Has(EntityEnum.Corrosive) && !below.Has(EntityEnum.Corrosive)) {
                     DisableGrounded(grid, x, y);
-                } else {
+                }
+                // Apply rank
+                else {
                     ApplyRank(grid, x, y);
                 }
-            } else if (below.Has(EntityEnum.NonCollidable) || below.Has(EntityEnum.Gas)) {
+            }
+            // If the entity below is of type non-collidable or type gas, disable grounded
+            else if (below.Has(EntityEnum.NonCollidable) || below.Has(EntityEnum.Gas)) {
                 DisableGrounded(grid, x, y);
-            } else if (below.Has(EntityEnum.Liquid)) {
+            }
+            // If the entity below is of type liquid
+            else if (below.Has(EntityEnum.Liquid)) {
                 boolean entityAcidic = entity.Has(EntityEnum.Corrosive);
                 boolean belowAcidic = below.Has(EntityEnum.Corrosive);
 
+                // If both liquids are acidic, disable grounded
                 if (entityAcidic && !belowAcidic) {
                     DisableGrounded(grid, x, y);
-                } else {
+                }
+                // Compare buoyancy
+                else {
                     int entityBuoyancy = ((Buoyancy) entity.Get(EntityEnum.Buoyancy)).GetRank();
                     int belowBuoyancy = ((Buoyancy) below.Get(EntityEnum.Buoyancy)).GetRank();
 
@@ -50,13 +62,13 @@ public class LiquidHandler {
             }
         }
 
+        // If the entity is grounded, calculate velocity
         if (grounded.IsGrounded()) {
             CalculateVelocity(grid, entity, x, y);
         }
     }
 
-    // Sets grounded to false for the whole column of similar type
-    public static void DisableGrounded(Grid grid, int x, int y) {
+    private static void DisableGrounded(Grid grid, int x, int y) {
         int prevBuoyancy = -1;
         Boolean columnCorrosive = null;
 
@@ -81,8 +93,7 @@ public class LiquidHandler {
         }
     }
 
-    // Apply a chronological rank to a grounded column of similar types
-    public static void ApplyRank(Grid grid, int x, int y) {
+    private static void ApplyRank(Grid grid, int x, int y) {
         int length = 0;
         int prevBuoyancy = -1;
         Boolean columnCorrosive = null;

@@ -5,14 +5,14 @@ import java.util.HashMap;
 import it.jjdoes.Atomix.Components.World.IWorldComponent;
 
 public class World implements IWorld {
-    private HashMap<Class<?>, IWorldComponent> _components = new HashMap<Class<?>, IWorldComponent>();
+    private final HashMap<Class<?>, IWorldComponent> _components;
 
     public World() {
-        this._components = new HashMap<Class<?>, IWorldComponent>();
+        _components = new HashMap<Class<?>, IWorldComponent>();
     }
 
     public World Add(IWorldComponent component) {
-        this._components.put(component.getClass(), component);
+        _components.put(component.getClass(), component);
         return this;
     }
 

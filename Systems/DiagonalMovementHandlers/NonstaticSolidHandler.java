@@ -32,10 +32,10 @@ public class NonstaticSolidHandler {
         // and verify that they are of type empty, gas, or liquid
         IEntity leftEntity = col - 1 >= 0 ? grid.GetEntity(row + 1, col - 1) : null;
         IEntity rightEntity = col + 1 < width ? grid.GetEntity(row + 1, col + 1) : null;
-        if (leftEntity != null && !(leftEntity.Has(EntityEnum.NonCollidable) || leftEntity.Has(EntityEnum.Liquid))) {
+        if (leftEntity != null && !((leftEntity.Has(EntityEnum.NonCollidable) || leftEntity.Has(EntityEnum.Liquid) || leftEntity.Has(EntityEnum.Gas)))) {
             leftEntity = null;
         }
-        if (rightEntity != null && !(rightEntity.Has(EntityEnum.NonCollidable) || rightEntity.Has(EntityEnum.Liquid))) {
+        if (rightEntity != null && !((rightEntity.Has(EntityEnum.NonCollidable) || rightEntity.Has(EntityEnum.Liquid) || rightEntity.Has(EntityEnum.Gas)))) {
             rightEntity = null;
         }
 
@@ -44,7 +44,7 @@ public class NonstaticSolidHandler {
             // If the entity is allowed to move diagonally
             if (diagonalMovement.CanMove(row, col)) {
                 diagonalMovement.SetPosition(row, col);
-                if (ThreadLocalRandom.current().nextFloat() < 0.95) {
+                if (ThreadLocalRandom.current().nextFloat() < diagonalMovement.GetStrength()) {
                     // Choose a random direction if the entity can move left or right
                     if (leftEntity != null && rightEntity != null) {
                         boolean direction = ThreadLocalRandom.current().nextBoolean();

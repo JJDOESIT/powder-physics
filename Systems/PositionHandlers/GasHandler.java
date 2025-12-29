@@ -14,7 +14,6 @@ import it.jjdoes.Atomix.Types.Entity.EntityEnum;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class GasHandler {
-    // General update function for the nonstatic liquid position handler
     public static void Update(Grid grid, IEntity entity, int x, int y) {
         // Declare top-level components
         Velocity velocity = (Velocity) entity.Get(EntityEnum.Velocity);
@@ -93,7 +92,6 @@ public class GasHandler {
         }
     }
 
-    // General function to update velocity of a given entity
     public static void CalculateVelocity(Grid grid, IEntity entity, int x, int y) {
         // Declare top-level components
         Velocity velocity = (Velocity) entity.Get(EntityEnum.Velocity);
@@ -119,8 +117,7 @@ public class GasHandler {
         }
     }
 
-    // General function to determine if there is a lower available cell within the given distance
-    public static boolean IsHigherPoint(Grid grid, IEntity entity, int x, int y, int direction) {
+    private static boolean IsHigherPoint(Grid grid, IEntity entity, int x, int y, int direction) {
         // Declare top-level components
         Spread spread = (Spread) entity.Get(EntityEnum.Spread);
         int spreadDistance = spread.GetDistance();

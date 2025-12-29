@@ -15,7 +15,6 @@ import it.jjdoes.Atomix.Types.Entity.EntityEnum;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class NonstaticSolidHandler {
-    // General update function for the nonstatic solid position handler
     public static void Update(Grid grid, IEntity entity, int x, int y) {
         // Declare top-level components
         Velocity velocity = (Velocity) entity.Get(EntityEnum.Velocity);
@@ -26,10 +25,8 @@ public class NonstaticSolidHandler {
         xVelocity = xVelocity >= 0 ? (float) Math.floor(xVelocity) : (float) Math.ceil(xVelocity);
         yVelocity = yVelocity >= 0 ? (float) Math.floor(yVelocity) : (float) Math.ceil(yVelocity);
 
-
         // Fetch the given path of the entity based on its velocity
         ArrayList<int[]> steps = MatrixTraversal(x, y, (int) (x + yVelocity), (int) (y + xVelocity));
-
 
         // Declare width and height of the grid
         int height = grid.GetHeight();
@@ -100,7 +97,7 @@ public class NonstaticSolidHandler {
                     y = dy;
                 }
 
-                // If the entity has free-falling enabled and
+                // If the entity has free-falling enabled
                 if (entity.Has(EntityEnum.Freefalling)) {
                     CheckFreefalling(grid, entity, x, y);
                 }
@@ -112,24 +109,24 @@ public class NonstaticSolidHandler {
 
     // General function to update velocity of a given entity
     public static void CalculateVelocity(Grid grid, IEntity entity) {
+        // Declare top-level components
         Velocity velocity = (Velocity) entity.Get(EntityEnum.Velocity);
+
         if (entity.Has(EntityEnum.ImpactScatter)) {
-            ImpactScatterHandler.Update(grid, entity);
+            ImpactScatterHandler.Update(entity);
         }
         velocity.SetVelocity(velocity.GetXVelocity(), 0);
     }
 
-    // Function to trigger chain-reaction with freefalling
-    public static void CheckFreefalling(Grid grid, IEntity entity, int x, int y) {
-        // Fetch grounded
-        Grounded grounded = entity.Has(EntityEnum.Grounded) ? (Grounded) entity.Get(EntityEnum.Grounded) : null;
+    private static void CheckFreefalling(Grid grid, IEntity entity, int x, int y) {
+        // Declare top-level components
+        Grounded grounded = (Grounded) entity.Get(EntityEnum.Grounded);
 
         // Declare the width of the grid
         int width = grid.GetWidth();
 
-        // If the entity has grounded, and it's grounded, return
-        // Note: If an entity does not have grounded, we will continue anyway
-        if (grounded != null && grounded.IsGrounded()) {
+        // If the entity is grounded, return
+        if (grounded.IsGrounded()) {
             return;
         }
 
@@ -148,7 +145,7 @@ public class NonstaticSolidHandler {
         if (left != null) {
             // If the left entity has freefalling class
             if (left.Has(EntityEnum.Freefalling)) {
-                // Fetch freefalling, velocity, and grounded
+                // Fetch top-level components
                 Freefalling freefalling = (Freefalling) left.Get(EntityEnum.Freefalling);
                 Velocity velocity = (Velocity) left.Get(EntityEnum.Velocity);
                 grounded = left.Has(EntityEnum.Grounded) ? (Grounded) left.Get(EntityEnum.Grounded) : null;
@@ -164,7 +161,7 @@ public class NonstaticSolidHandler {
         if (right != null) {
             // If the right entity has freefalling class
             if (right.Has(EntityEnum.Freefalling)) {
-                // Fetch freefalling, velocity, and grounded
+                // Fetch top-level components
                 Freefalling freefalling = (Freefalling) right.Get(EntityEnum.Freefalling);
                 Velocity velocity = (Velocity) right.Get(EntityEnum.Velocity);
                 grounded = right.Has(EntityEnum.Grounded) ? (Grounded) right.Get(EntityEnum.Grounded) : null;

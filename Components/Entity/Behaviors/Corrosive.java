@@ -1,17 +1,18 @@
 package it.jjdoes.Atomix.Components.Entity.Behaviors;
 
 import it.jjdoes.Atomix.Components.Entity.IEntityComponent;
+import it.jjdoes.Atomix.Engine.InputProcessing.ITypeFactory;
 import it.jjdoes.Atomix.Types.Entity.IEntity;
 
 public class Corrosive implements IEntityComponent {
     private final float _solidPercentage;
     private final float _liquidPercentage;
-    private IEntity _particle;
+    private final ITypeFactory _typeFactory;
 
-    public Corrosive(float solidPercentage, float liquidPercentage, IEntity particle) {
+    public Corrosive(float solidPercentage, float liquidPercentage, ITypeFactory typeFactory) {
         _solidPercentage = solidPercentage;
         _liquidPercentage = liquidPercentage;
-        _particle = particle;
+        _typeFactory = typeFactory;
     }
 
     public float GetSolidPercentage() {
@@ -23,10 +24,10 @@ public class Corrosive implements IEntityComponent {
     }
 
     public IEntity GetParticle() {
-        return _particle;
+        return _typeFactory.Create();
     }
 
     public IEntityComponent Copy() {
-        return new Corrosive(_solidPercentage, _liquidPercentage, _particle);
+        return new Corrosive(_solidPercentage, _liquidPercentage, _typeFactory);
     }
 }

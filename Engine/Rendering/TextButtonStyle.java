@@ -1,4 +1,4 @@
-package it.jjdoes.Atomix.Rendering;
+package it.jjdoes.Atomix.Engine.Rendering;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
