@@ -34,7 +34,7 @@ public class Sand implements IEntityComponent {
             .Add(new AirResistance(0.8f), EntityEnum.AirResistance)
             .Add(new Freefalling(10), EntityEnum.Freefalling)
             .Add(new Mass(1f), EntityEnum.Mass)
-            .Add(new DiagonalMovement(0.95f), EntityEnum.DiagonalMovement)
+            .Add(new DiagonalMovement(1f), EntityEnum.DiagonalMovement)
             .Add(new Velocity(), EntityEnum.Velocity);
     }
 }
